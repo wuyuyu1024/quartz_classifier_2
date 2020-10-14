@@ -11,7 +11,7 @@ If either feature is missing in a sample, the sample will be dropped.
 
 """)
 try:
-    clf = load(r'C:\Users\yuwan\Dropbox\workspace-ol\quartz_classifier\quartz_clf.joblib')
+    clf = load(r'.\quartz_clf.joblib')
 except:
     input("FileNotFoundError, press Enter to Exit.")
     raise SystemExit()
