@@ -21,8 +21,8 @@ except FileNotFoundError:
     print("Exception raised during loading of classifier.\n")
     raise
 
-# data_file_path = input("Please enter the path to the data file:")
-data_file_path = "data_for_svm.csv"  # DEBUG
+data_file_path = input("Please enter the path to the data file:")
+# data_file_path = "data_for_svm.csv"  # DEBUG
 
 elements = ["Al", "Ti", "Li", "Ge", "Sr"]
 
