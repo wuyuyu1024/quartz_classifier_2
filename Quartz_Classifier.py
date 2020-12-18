@@ -17,13 +17,13 @@ and MAKE SURE this column name row is the FIRST row.
 )
 
 try:
-    classifier = load(r"./quartz_clf.joblib")
+    classifier = load("quartz_clf.joblib")
 except FileNotFoundError:
     print("Exception raised during loading of classifier.\n")
     raise
 
 data_file_path = input("Please enter the path to the data file:")
-# data_file_path = r"C:\Users\yuwan\Dropbox\Zotero\datapro\Qinglong.xlsx"  # DEBUG
+data_file_path = r"C:\Users\yuwan\Dropbox\Zotero\datapro\Qinglong.xlsx"  # DEBUG
 
 elements = ["Al", "Ti", "Li", "Ge", "Sr"]
 # print(os.path.basename(data_file_path))
@@ -43,7 +43,7 @@ for element in elements:
 
 to_predict = df.loc[:, elements].dropna()
 to_predict.reset_index(drop=True, inplace=True)
-print(f"{len(to_predict.Al)} samples available")
+print(f"{to_predict.shape[0]} samples available")
 predict_res = classifier.predict(to_predict)
 c: Counter[str] = Counter(predict_res)
 if not c:
@@ -56,8 +56,8 @@ res = np.concatenate([predict_res, proba], axis=1)
 res = pd.DataFrame(res, columns=['pred_quartz_type', 'IRG_proba', 'Carlin_proba', 'epithermal_proba',
                                  'granite_proba', 'greisen_proba', 'orogenic_proba', 'pegmatite_proba',
                                  'porphyry_proba', 'skarn_proba'])
+pd.set_option('display.max_columns', 10)
 print('Detailed report preview:\n', res)
-res2 = pd.concat([to_predict['Al'], res], axis=1, )
 
 print("The samples are predicted respectively to be: ")
 print(c.most_common(), "\n")
@@ -65,11 +65,12 @@ print(
     f"The most possible type of the group of samples is: {c.most_common(1)[0][0]}.\n"
 )
 
-if input('Save report? y/n').lower() == 'y':
-    basename = os.path.basename(data_file_path)
-    prefix = basename.split('.')[0]
+if input('Save report? (y/n): ').lower() == 'y':
+    base_filename = os.path.basename(data_file_path)
+    prefix, _ = os.path.splitext(base_filename)
     save_name = prefix + '_result.xlsx'
+    res2 = pd.concat([to_predict['Al'], res], axis=1, )
     output = df.join(res2.set_index('Al'), on='Al')
     output.to_excel(save_name)
-    print(f'{save_name} saved')
+    print(f'{save_name} saved.')
 input("Press any key to exit.")
