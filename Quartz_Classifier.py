@@ -23,7 +23,7 @@ except FileNotFoundError:
     raise
 
 data_file_path = input("Please enter the path to the data file:")
-data_file_path = r"C:\Users\yuwan\Dropbox\Zotero\datapro\Qinglong.xlsx"  # DEBUG
+# data_file_path = r"C:\Users\yuwan\Dropbox\Zotero\datapro\Qinglong.xlsx"  # DEBUG
 
 elements = ["Al", "Ti", "Li", "Ge", "Sr"]
 # print(os.path.basename(data_file_path))
