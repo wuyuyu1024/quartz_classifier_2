@@ -24,7 +24,7 @@ except FileNotFoundError:
 
 data_file_path = input("Please enter the path to the data file:")
 # data_file_path = r"C:\Users\yuwan\Dropbox\Zotero\datapro\Qinglong.xlsx"  # DEBUG
-
+# C:\Users\yuwan\Dropbox\Zotero\datapro\to_save\Rotier.xlsx
 elements = ["Al", "Ti", "Li", "Ge", "Sr"]
 # print(os.path.basename(data_file_path))
 try:
@@ -34,9 +34,8 @@ try:
     elif data_file_extension == ".csv":
         df = pd.read_csv(data_file_path)
 except (FileNotFoundError, NameError):
-    print("Exception raised during loading of data file.\n")
+    input("Exception raised during loading of data file.\n")
     # Debug
-    raise
 
 for element in elements:
     df[element] = pd.to_numeric(df[element], errors="coerce")
@@ -44,10 +43,11 @@ for element in elements:
 to_predict = df.loc[:, elements].dropna()
 to_predict.reset_index(drop=True, inplace=True)
 print(f"{to_predict.shape[0]} samples available")
+print(to_predict.describe())
 predict_res = classifier.predict(to_predict)
 c: Counter[str] = Counter(predict_res)
 if not c:
-    print("no sample with the 5 features detected!")
+    input("no sample with the 5 features detected!")
     raise SystemExit()
 
 proba = classifier.predict_proba(to_predict)
