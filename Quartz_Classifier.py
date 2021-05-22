@@ -37,6 +37,16 @@ except (FileNotFoundError, NameError):
     input("Exception raised during loading of data file.\n")
     # Debug
 
+index = ['IRG', 'carlin', 'epithermal', 'granite', 'greisen', 'orogenic',
+       'pegmatite', 'porphyry', 'skarn']
+for i in range(len(index)):
+    if index[i] == "IRG":
+        pass
+    else:
+        tem = index[i].capitalize()
+        index[i] = tem
+
+
 for element in elements:
     df[element] = pd.to_numeric(df[element], errors="coerce")
 
@@ -45,12 +55,19 @@ to_predict.reset_index(drop=True, inplace=True)
 print(f"{to_predict.shape[0]} samples available")
 print(to_predict.describe())
 predict_res = classifier.predict(to_predict)
+predict_res = list(predict_res)
+for i, ind in enumerate(predict_res):
+    predict_res[i] = index[ind]
+
 c: Counter[str] = Counter(predict_res)
 if not c:
     input("no sample with the 5 features detected!")
     raise SystemExit()
 
+
+
 proba = classifier.predict_proba(to_predict)
+predict_res = np.array(predict_res)
 predict_res = predict_res.reshape((predict_res.shape[0], 1))
 res = np.concatenate([predict_res, proba], axis=1)
 res = pd.DataFrame(res, columns=['pred_quartz_type', 'IRG_proba', 'Carlin_proba', 'epithermal_proba',
